@@ -5,6 +5,8 @@ import Popup from './Popup';
 import Footer from './Footer';
 import LoginForm from './LoginForm';
 import Welcome from './Welcome';
+import SingOut from './SingOut';
+import UserCam from './WebCam';
 
 class Main extends React.Component {
     constructor(props) {
@@ -16,7 +18,8 @@ class Main extends React.Component {
             questionAnswered: false,
             score: 0,
             displayPopup: 'flex',
-            user:null
+            user:null,
+            wrongAnswer: false
 
         }
         this.nextQuestion = this.nextQuestion.bind(this);
@@ -25,6 +28,8 @@ class Main extends React.Component {
         this.handleIncreaseScore = this.handleIncreaseScore.bind(this);
         this.signIn= this.signIn.bind(this);
         this.signOut=this.signOut.bind(this);
+        this.quitUser=this.quitUser.bind(this);
+        this.checkWrongAnswer=this.checkWrongAnswer.bind(this);
     }
 
     pushData(nr) {
@@ -79,7 +84,7 @@ class Main extends React.Component {
     }
 
     // App "actions" (functions that modify state)
-    signIn(username, password) {
+    signIn(username) {
     // This is where you would call Firebase, an API etc...
     // calling setState will re-render the entire app (efficiently!)
     this.setState({
@@ -94,27 +99,48 @@ class Main extends React.Component {
         this.setState({user: null})
     }
 
-    render() {
-        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score} = this.state;
-        console.log('Main',this.state)
+    quitUser(){
+        this.setState({
+            user:null
+        })        
+    }
+
+    checkWrongAnswer(){
+        this.setState({
+            wrongAnswer:true
+        })
+    }
+
+    checkUser(){
         
+    }
+    render() {
+        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer} = this.state;
+        console.log('Main',this.state)
+        console.log('MainProps',this.props)
+        console.log('Show buttones',navigator.getUserMedia)
         return (
             <div className="container">
-
-                <Popup style={{display: displayPopup}} score={score} total={total} startQuiz={this.handleStartQuiz}/>
-                 {(this.state.user) ? <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>:<LoginForm onSignIn={this.signIn.bind(this)}/>}
-                                <div className="row">
-                    <div className="col-lg-10 col-lg-offset-1">
-                        <div id="question">
-                            <h4>Question {nr}/{total}</h4>
-                            <p>{question}</p>
+                 {(this.state.user) ? 
+                 <React.Fragment>
+                     <UserCam/>
+                        <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>
+                        <div className="row">
+                            <div className="col-lg-10 col-lg-offset-1">
+                                <div id="question">
+                                    <h4>Pregunta {nr}/{total}</h4>
+                                    <p>{question}</p>
+                                </div>
+                                <Answers answers={answers} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer}/>
+                                <div id="submit">
+                                    {wrongAnswer ? <SingOut onSignOut={this.signOut.bind(this)}/>:
+                                    
+                                        showButton ? <button className="fancy-btn" onClick={this.nextQuestion} >{nr===total ? 'Finish quiz' : 'Next question'}</button> : null}
+                                </div>
+                            </div>
                         </div>
-                        <Answers answers={answers} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}/>
-                        <div id="submit">
-                            {showButton ? <button className="fancy-btn" onClick={this.nextQuestion} >{nr===total ? 'Finish quiz' : 'Next question'}</button> : null}
-                        </div>
-                    </div>
-                </div>
+                    </React.Fragment>
+                    :<LoginForm onSignIn={this.signIn.bind(this)}/>}     
                 <Footer />
             </div>
         );

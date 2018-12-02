@@ -29,16 +29,15 @@ class LoginForm extends React.Component {
         let { style } = this.props;
         
         return (
-            <div className="popup-container" style={style}>
-                <div className="container">
+            <div className="form-container" style={style}>
+                <div className="container form-bloque">
                     <div className="col-md-8 col-md-offset-2">
-                        <div className="popup">
-                            <h1>{title}</h1>
-                            <form onSubmit={this.handleSignIn}>
-                                <input type="text" ref="username" placeholder="nombre" />
-                                <input type="submit" value="Entrar" />
+                    <div className='thePannel'>The Pannel</div>
+                        <h1>{title}</h1>
+                            <form onSubmit={this.handleSignIn} className='formThePannel'>
+                                <input type="text" ref="username" placeholder="nombre" className='formName'/>
+                                <input type="submit" className='submitEnter' value="Entrar" />
                             </form>
-                        </div>
                     </div>
                 </div>
             </div>

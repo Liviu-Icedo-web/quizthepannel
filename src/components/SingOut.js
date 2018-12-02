@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Welcome extends React.Component { 
+class SingOut extends React.Component { 
     /* ------ ----- ------*/ 
     handleSignIn(e) {
         e.preventDefault()
@@ -13,13 +13,12 @@ class Welcome extends React.Component {
         console.log('welcome Props',this.props);
         
         return (     
-                                <div>
-                                    Bienvenido <strong>{this.props.user.username}</strong>!
-                                        <a href="javascript:;" onClick={this.props.onSignOut}>Salir</a>
+                                <div className='singOut singOut-btn'>
+                                        <a href="javascript:;" onClick={this.props.onSignOut}>Muchas Gracias!!!</a>
                                 </div>
                        
         );
     }
 }
 
-export default Welcome
+export default SingOut
