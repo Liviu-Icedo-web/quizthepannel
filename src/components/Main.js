@@ -84,8 +84,7 @@ class Main extends React.Component {
     // calling setState will re-render the entire app (efficiently!)
     this.setState({
         user: {
-            username,
-            password,
+            username
             }
         })
     }

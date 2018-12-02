@@ -5,10 +5,9 @@ class LoginForm extends React.Component {
         super(props);
         
         this.state = {
-            title: 'Please sign in',
+            title: 'Crea tu usuario',
             user: {
-                username:'',
-                password:''
+                username:''
               }
         };
         
@@ -20,8 +19,7 @@ class LoginForm extends React.Component {
     handleSignIn(e) {
         e.preventDefault()
         let username = this.refs.username.value
-        let password = this.refs.password.value
-        this.props.onSignIn(username, password)
+        this.props.onSignIn(username)
       }
    /* ------ ----- ------*/ 
     render() {
@@ -37,10 +35,8 @@ class LoginForm extends React.Component {
                         <div className="popup">
                             <h1>{title}</h1>
                             <form onSubmit={this.handleSignIn}>
-                                <h3>Sign in</h3>
-                                <input type="text" ref="username" placeholder="enter you username" />
-                                <input type="password" ref="password" placeholder="enter password" />
-                                <input type="submit" value="Login" />
+                                <input type="text" ref="username" placeholder="nombre" />
+                                <input type="submit" value="Entrar" />
                             </form>
                         </div>
                     </div>

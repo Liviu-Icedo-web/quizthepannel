@@ -6,7 +6,7 @@ class Welcome extends React.Component {
         e.preventDefault()
         let username = this.refs.username.value
         let password = this.refs.password.value
-        this.props.onSignIn(username, password)
+        this.props.onSignIn(username)
       }
    /* ------ ----- ------*/ 
     render() {
@@ -16,7 +16,7 @@ class Welcome extends React.Component {
         return (     
                                 <div>
                                     Welcome <strong>{this.props.user.username}</strong>!
-                                        <a href="javascript:;" onClick={this.props.onSignOut}>Sign out</a>
+                                        <a href="javascript:;" onClick={this.props.onSignOut}>Salir</a>
                                 </div>
                        
         );
