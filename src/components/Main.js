@@ -7,6 +7,7 @@ import LoginForm from './LoginForm';
 import Welcome from './Welcome';
 import SingOut from './SingOut';
 import UserCam from './WebCam';
+import QuestionsPannel from './Questions';
 
 class Main extends React.Component {
     constructor(props) {
@@ -19,7 +20,8 @@ class Main extends React.Component {
             score: 0,
             displayPopup: 'flex',
             user:null,
-            wrongAnswer: false
+            wrongAnswer: false,
+            userThePannel: false
 
         }
         this.nextQuestion = this.nextQuestion.bind(this);
@@ -30,6 +32,7 @@ class Main extends React.Component {
         this.signOut=this.signOut.bind(this);
         this.quitUser=this.quitUser.bind(this);
         this.checkWrongAnswer=this.checkWrongAnswer.bind(this);
+        this.checkUserthePannel =this.checkUserthePannel.bind(this);
     }
 
     pushData(nr) {
@@ -44,6 +47,13 @@ class Main extends React.Component {
     componentWillMount() {
         let { nr } = this.state;
         this.pushData(nr);
+    }
+
+    componentDidUpdate(oldProps,oldState){
+        const newState = this.state  
+        if(oldState.user !== newState.user) {
+            this.checkUserthePannel();
+        }
     }
 
     nextQuestion() {
@@ -111,20 +121,28 @@ class Main extends React.Component {
         })
     }
 
-    checkUser(){
+    checkUserthePannel(){
+        const userThePannel = this.state.user.username
+        console.log(userThePannel)
+        if(userThePannel === 'userThePannel'){
+           this.setState({
+                userThePannel:true
+            })
+        }
         
     }
     render() {
-        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer} = this.state;
+        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel} = this.state;
         console.log('Main',this.state)
         console.log('MainProps',this.props)
-        console.log('Show buttones',navigator.getUserMedia)
         return (
             <div className="container">
                  {(this.state.user) ? 
                  <React.Fragment>
+                     <QuestionsPannel />
                      <UserCam/>
                         <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>
+                        {userThePannel ? <div>Bravo ma</div>:<div>NUUUUUU</div>}
                         <div className="row">
                             <div className="col-lg-10 col-lg-offset-1">
                                 <div id="question">
