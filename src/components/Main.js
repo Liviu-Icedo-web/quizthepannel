@@ -122,7 +122,7 @@ class Main extends React.Component {
     }
 
     checkUserthePannel(){
-        const userThePannel = this.state.user.username
+        const userThePannel = this.state.user ? this.state.user.username: null
         console.log(userThePannel)
         if(userThePannel === 'userThePannel'){
            this.setState({
@@ -139,9 +139,10 @@ class Main extends React.Component {
             <div className="container">
                  {(this.state.user) ? 
                  <React.Fragment>
+                     <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>
                      <QuestionsPannel />
                      <UserCam/>
-                        <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>
+                        
                         {userThePannel ? <div>Bravo ma</div>:<div>NUUUUUU</div>}
                         <div className="row">
                             <div className="col-lg-10 col-lg-offset-1">

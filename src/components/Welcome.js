@@ -13,9 +13,9 @@ class Welcome extends React.Component {
         console.log('welcome Props',this.props);
         
         return (     
-                                <div>
-                                    Bienvenido <strong>{this.props.user.username}</strong>!
-                                        <a href="javascript:;" onClick={this.props.onSignOut}>Salir</a>
+                                <div className='welcome'>
+                                    <p>Bienvenido <span className='userName'>{this.props.user.username}</span> !</p>
+                                        <p><a href="javascript:;" onClick={this.props.onSignOut}>Salir</a></p>
                                 </div>
                        
         );

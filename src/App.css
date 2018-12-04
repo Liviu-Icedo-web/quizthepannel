@@ -34,7 +34,7 @@
 body {
   background-color: #e4e4e4;
 font-family: Open Sans;
-  margin-top: 10%;
+  margin-top: 25px;
   margin-bottom: 50px;
   
 }
@@ -44,6 +44,7 @@ font-family: Open Sans;
   color: white;
   padding: 10px;
   text-align: center;
+  margin: 5px 5px;
 }
 
 #question h4{
@@ -348,6 +349,18 @@ footer span {
   border: 2px solid #085477;
   background-color: #085477;
   color: rgb(165, 164, 164);
+}
+
+.welcome{
+  background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+}
+
+.userName{
+  color:#0094da;
+  font-weight: bold;
 }
 
 /* Liviu--> */
