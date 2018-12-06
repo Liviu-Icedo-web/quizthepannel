@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Countdown from 'react-countdown-now';
 import axios from 'axios';
 import data from '../data/data';
 import Answers from './Answers';
@@ -10,8 +8,7 @@ import LoginForm from './LoginForm';
 import Welcome from './Welcome';
 import SingOut from './SingOut';
 import UserCam from './WebCam';
-import QuestionsPannel from './QuestionsPannel';
-import PreparText from './PreparText';
+import QuestionsPannel from './Questions';
 
 
 class Main extends React.Component {
@@ -26,13 +23,12 @@ class Main extends React.Component {
             displayPopup: 'flex',
             user:null,
             wrongAnswer: false,
-            userThePannel: false,  
-            idQ:1,
-            questions:[],
-            countDownQ: false
-           
+            userThePannel: false,
+            countDown:10000,
+            idQ:10,
 
         }
+        this.nextQuestion = this.nextQuestion.bind(this);
         this.handleShowButton = this.handleShowButton.bind(this);
         this.handleStartQuiz = this.handleStartQuiz.bind(this);
         this.handleIncreaseScore = this.handleIncreaseScore.bind(this);
@@ -41,8 +37,9 @@ class Main extends React.Component {
         this.quitUser=this.quitUser.bind(this);
         this.checkWrongAnswer=this.checkWrongAnswer.bind(this);
         this.checkAdmin =this.checkAdmin.bind(this);
-        this.pannelFunc=this.pannelFunc.bind(this);
-        this.renderer = this.renderer.bind(this);
+        this.showQuestion=this.showQuestion.bind(this);
+        this.countBlock =this.countBlock.bind(this);
+        this.welcomeThePannel=this.welcomeThePannel.bind(this);
        
     }
 
@@ -58,8 +55,7 @@ class Main extends React.Component {
     componentWillMount() {
         let { nr } = this.state;
         this.pushData(nr);
-        this.getQuestions();
-        //setInterval(()=>{this.getLaunchIdQ()},1000)
+        setInterval(()=>{this.getLaunchIdQ()},1000)
         
     }
 
@@ -68,21 +64,20 @@ class Main extends React.Component {
         if(oldState.user !== newState.user) {
             this.checkAdmin();
             this.setState({
-                countDownQ:false
+                countDown:10000 //Tengo un bug con el Mount por esto lo rescribo aqui
             })
         }
         if(oldState.idQ !== newState.idQ) {
-            console.log('ENTRAAAA')
-        this.setState({
-           idQ:newState.idQ,
-           question: data[newState.idQ].question,
-           answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
-           correct: data[newState.idQ].correct,
-           questionAnswered:false,
-           countDownQ:true
-          })
-          
-        }
+            this.setState({
+                idQ:newState.idQ,
+                question: data[newState.idQ].question,
+                answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
+                correct: data[newState.idQ].correct,
+                questionAnswered:false,
+                countDown:10
+              })
+              
+            }
     }
 
     getQuestions(){
@@ -95,13 +90,31 @@ class Main extends React.Component {
         .catch(error => {
         })
     }
-
+    
     getLaunchIdQ(){
         axios.get('http://localhost:4000/LaunchQuestions.json').then(response =>{
             this.setState({
-                idQ:response.data.idQ
+                idQ:response.data.idQ,
+                countDown:this.state.countDown -1
             })
         })
+    }
+
+    nextQuestion() {
+        let { nr, total, score } = this.state;
+        console.log('next Question',nr);
+
+        if(nr === total){
+            this.setState({
+                displayPopup: 'flex'
+            });
+        } else {
+            this.pushData(nr);
+            this.setState({
+                showButton: false,
+                questionAnswered: false
+            });
+        }
     }
 
     handleShowButton() {
@@ -164,65 +177,52 @@ class Main extends React.Component {
         
     }
 
-    pannelFunc(){
+    showQuestion(){
+        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
+       return(
+        <Answers answers={answers} question={question} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer}/>
+       ) ;
+    }
+    countBlock(){
         return(
-            <div>
-            <QuestionsPannel/>
+            <div id="question">
+                <h4>Preparate, la pregunta se lanzara en:</h4>
+                <p>{this.state.countDown}</p>
             </div>
         );
     }
-    
-    completQuestion (){
-        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,pannelFunc,countDownQ} = this.state;
+
+    welcomeThePannel(){
         return(
-            <Answers answers={answers} correct={correct} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer}/>
-        );
-    } 
-
-// Renderer callback with condition
-  renderer = ({ seconds, completed}) => {
-  if (completed) {
-    // Render a complete state
-    return this.completQuestion();
-  } else {
-    // Render a countdown
-    return <span>Preparate, la pregunta aparecera en : {seconds}</span>;
-  }
-};
-
-
+            <div id="question">
+                <h4>Bienvenido a ThePannel!!!
+                </h4>
+                <p>En breve empezamos</p>
+            </div>
+        )
+    }
     render() {
-        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,pannelFunc,countDownQ} = this.state;
+        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
         console.log('Main',this.state)
         console.log('MainProps',this.props)
-        console.log('Rendered',this.renderer)
-        console.log('---- CAMBIA COUNT -----',this.state.countDownQ)
         return (
             <div className="container">
-            
                 {(this.state.user) ? 
                                     <React.Fragment>
-                                        <Welcome user={this.state.user} onSignOut={this.signOut.bind(this)}/>
-                                        {userThePannel  ?   <div>{this.pannelFunc()}</div>
+                                        <Welcome user={this.state.user} score={score} onSignOut={this.signOut.bind(this)}/>
+                                        {userThePannel  ?   <QuestionsPannel />
                                                         :
-                                                           
-                                                           <div className="row">
-                                                           {!countDownQ ?
-                                                                        <div>
-                                                                        <UserCam/>
-                                                                        <PreparText />
-                                                                        <Countdown date={Date.now() + 5000} renderer={this.renderer} />
-                                                                        <div className="col-lg-10 col-lg-offset-1">
-                                                                            <div id="submit">
-                                                                                {wrongAnswer    ?   <SingOut onSignOut={this.signOut.bind(this)}/>
-                                                                                                :
-                                                                                                showButton  ?   <button className="fancy-btn" onClick={this.nextQuestion} >{nr===total ? 'Finish quiz' : 'Next question'}</button> 
-                                                                                : null}
-                                                                            </div>
-                                                                        </div></div>
-                                                                        
-                                                                        :null}
+                                                            <div className="row">
+                                                                <UserCam/>
+                                                                <div className="col-lg-10 col-lg-offset-1">
+                                                                    
+                                                                    {countDown>10 ? this.welcomeThePannel()
+                                                                                : countDown <0 ? this.showQuestion():this.countBlock()}
                                                             
+                                                                    <div id="submit">
+                                                                        {wrongAnswer    ?   <SingOut onSignOut={this.signOut.bind(this)}/>: null}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                         }                
                                     </React.Fragment>

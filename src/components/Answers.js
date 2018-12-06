@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 
 class Answers extends React.Component {
@@ -9,13 +8,12 @@ class Answers extends React.Component {
             isAnswered: false,
             classNames: ['', '', ''],
             correctAnswer: true,
-            questions:[],
-            answers:[],
-            idQ:1
+            win:false
         }
         
         this.checkAnswer = this.checkAnswer.bind(this);
-        this.getQuestionsA = this.getQuestionsA.bind(this);
+        this.showQuestion = this.showQuestion.bind(this);
+        this.showError = this.showError.bind(this);
     }
     
     checkAnswer(e) {
@@ -31,6 +29,9 @@ class Answers extends React.Component {
             if(answer === correct){
                 updatedClassNames[answer-1] = 'right';
                 increaseScore();
+                this.setState({
+                    win:true
+                })
             }
             else {
                 updatedClassNames[answer-1] = 'wrong';
@@ -49,45 +50,58 @@ class Answers extends React.Component {
         }
     }
     
-
-    getQuestionsA(){
-        axios.get('/Questions.json')
-            .then(response => {
-                this.setState({
-                    questions:response.data
-            })
-        })
-        .catch(error => {
-        })
-    }
-
-    getLaunchIdQ(){
-        axios.get('http://localhost:4000/LaunchQuestions.json').then(response =>{
-            this.setState({
-                idQ:response.data.idQ
-            })
-        })
-    }
-
-    componentWillMount() {
-        this.getQuestionsA();
-        setInterval(()=>{this.getLaunchIdQ()},1000)
-        
-    }
-
     componentDidUpdate(oldProps,oldState) {
         const newProps = this.props
-        const newState = this.state
         if(oldProps.answers !== newProps.answers) {
           this.setState({
-            classNames:['','',''],
-            
+            classNames:['','','']
           })
         }
       }
 
+    showQuestion(){
+        let { answers,question,score } = this.props;
+        let { win,classNames } = this.state;
+        
+        
+        if(!win){
+            return(
+                <div id="answers">
+            <div id="question">
+                
+                <p>{question}</p>
+            </div>
+                <ul>
+                    <li onClick={this.checkAnswer} className={classNames[0]} data-id="1"><span>A</span> <p>{answers[0]}</p></li>
+                    <li onClick={this.checkAnswer} className={classNames[1]} data-id="2"><span>B</span> <p>{answers[1]}</p></li>
+                    <li onClick={this.checkAnswer} className={classNames[2]} data-id="3"><span>C</span> <p>{answers[2]}</p></li>
+                </ul>
+            </div>
+            );
+        
+        }else{
+            
+            return(
+            <div className="alert alert-success" role="alert">
+            Bien, tienes <strong>{this.props.score}</strong> respuesta correcta 
+            </div>
+            )
+        }
+            
+        
+        
+    }
+
+    showError(){
+        return(
+            <div className="alert alert-danger" role="alert">
+            Has fallado. La respuesta correcta, era <strong>{this.props.answers[this.props.correct-1]}</strong>
+      </div>
+        );
+    }
+    
     render() {
-        let { answers,question,classNames} = this.state;
+       
         
         let transition = {
             transitionName: "example",
@@ -100,19 +114,9 @@ class Answers extends React.Component {
         return (
 
             (this.state.correctAnswer)?
-            <div id="answers">
-             <div id="question">
-                <p>{question}</p>
-            </div>
-                <ul>
-                    <li onClick={this.checkAnswer} className={classNames[0]} data-id="1"><span>A</span> <p>{answers[0]}</p></li>
-                    <li onClick={this.checkAnswer} className={classNames[1]} data-id="2"><span>B</span> <p>{answers[1]}</p></li>
-                    <li onClick={this.checkAnswer} className={classNames[2]} data-id="3"><span>C</span> <p>{answers[2]}</p></li>
-                </ul>
-            </div>:
-            <div className="alert alert-danger" role="alert">
-                Has fallado. La respuesta correcta era <strong>{this.props.answers[this.props.correct-1]}</strong>
-          </div>
+            this.showQuestion()
+            :
+            this.showError()
         );
     }
 }
