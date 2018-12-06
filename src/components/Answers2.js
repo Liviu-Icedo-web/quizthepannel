@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 
 class Answers extends React.Component {
@@ -8,14 +7,10 @@ class Answers extends React.Component {
         this.state = {
             isAnswered: false,
             classNames: ['', '', ''],
-            correctAnswer: true,
-            questions:[],
-            answers:[],
-            idQ:1
+            correctAnswer: true
         }
         
         this.checkAnswer = this.checkAnswer.bind(this);
-        this.getQuestionsA = this.getQuestionsA.bind(this);
     }
     
     checkAnswer(e) {
@@ -49,45 +44,18 @@ class Answers extends React.Component {
         }
     }
     
-
-    getQuestionsA(){
-        axios.get('/Questions.json')
-            .then(response => {
-                this.setState({
-                    questions:response.data
-            })
-        })
-        .catch(error => {
-        })
-    }
-
-    getLaunchIdQ(){
-        axios.get('http://localhost:4000/LaunchQuestions.json').then(response =>{
-            this.setState({
-                idQ:response.data.idQ
-            })
-        })
-    }
-
-    componentWillMount() {
-        this.getQuestionsA();
-        setInterval(()=>{this.getLaunchIdQ()},1000)
-        
-    }
-
     componentDidUpdate(oldProps,oldState) {
         const newProps = this.props
-        const newState = this.state
         if(oldProps.answers !== newProps.answers) {
           this.setState({
-            classNames:['','',''],
-            
+            classNames:['','','']
           })
         }
       }
 
     render() {
-        let { answers,question,classNames} = this.state;
+        let { answers } = this.props;
+        let { classNames } = this.state;
         
         let transition = {
             transitionName: "example",
@@ -101,9 +69,6 @@ class Answers extends React.Component {
 
             (this.state.correctAnswer)?
             <div id="answers">
-             <div id="question">
-                <p>{question}</p>
-            </div>
                 <ul>
                     <li onClick={this.checkAnswer} className={classNames[0]} data-id="1"><span>A</span> <p>{answers[0]}</p></li>
                     <li onClick={this.checkAnswer} className={classNames[1]} data-id="2"><span>B</span> <p>{answers[1]}</p></li>

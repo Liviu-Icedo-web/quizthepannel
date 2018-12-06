@@ -351,11 +351,12 @@ footer span {
   color: rgb(165, 164, 164);
 }
 
-.welcome{
+.welcome-block{
   background-color: #fff;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     border: 1px solid #e0e0e0;
     padding: 10px;
+    text-align: left;
 }
 
 .userName{
@@ -363,5 +364,25 @@ footer span {
   font-weight: bold;
 }
 
+.streaming-block{
+  margin-top: 15px;
+}
+
+.capture-btn-pn {
+  border: 2px solid #0094da;
+  background-color: #0094da;
+  color: #fff;
+}
+
+.capture-btn-pn:hover {
+  border: 2px solid #085477;
+  background-color: #085477;
+  color: rgb(165, 164, 164);
+}
+
+.capture-pn img{
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+}
 /* Liviu--> */
 /*Fin Icedo Web CSS-->*/
