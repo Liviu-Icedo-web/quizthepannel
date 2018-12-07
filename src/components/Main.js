@@ -68,14 +68,20 @@ class Main extends React.Component {
             })
         }
         if(oldState.idQ !== newState.idQ) {
-            this.setState({
-                idQ:newState.idQ,
-                question: data[newState.idQ].question,
-                answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
-                correct: data[newState.idQ].correct,
-                questionAnswered:false,
-                countDown:10
-              })
+            if(newState.idQ==null){
+
+            }else{
+                this.setState({
+                    idQ:newState.idQ,
+                    question: data[newState.idQ].question,
+                    answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
+                    correct: data[newState.idQ].correct,
+                    questionAnswered:false,
+                    countDown:10
+                  })
+            }
+            
+            
               
             }
     }
