@@ -4,7 +4,7 @@ class Footer extends React.Component{
     render() {
         return (
             <footer>
-                <p>Built with <span>&hearts;</span> by <a href="http://www.icedo-web.com/">Icedo Web</a></p>
+                <p>The Pannel 2018 / PICH&KO </p>
             </footer>
         )
     }
