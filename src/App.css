@@ -32,7 +32,7 @@
 }
 /*<-- Icedo Web CSS*/
 body {
-  background-color: #e4e4e4;
+  /*background-color: #e4e4e4;*/  
 font-family: Open Sans;
   margin-top: 25px;
   margin-bottom: 50px;
@@ -261,7 +261,7 @@ footer span {
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: rgba(0,0,0,0.5);
+  
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -270,13 +270,13 @@ footer span {
 
 .form-container {
   text-align: center;
-  background-color: #fff;
+ 
   border-radius: 10px;
   overflow: hidden;
 }
 
 .form-container h1 {
-  background-color: #0094da;
+  
   color: white;
   border-bottom: 1px solid #ccc;
   padding: 20px;
@@ -315,6 +315,7 @@ footer span {
 
 .thePannel{
   font-size: 18px;
+  color:#fff;
 }
 
 
