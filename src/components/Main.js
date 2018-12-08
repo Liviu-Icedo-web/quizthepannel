@@ -11,6 +11,7 @@ import UserCam from './WebCam';
 import QuestionsPannel from './Questions';
 
 
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -98,9 +99,10 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
-        axios.get('http://localhost:4000/LaunchQuestions.json').then(response =>{
-            this.setState({
-                idQ:response.data.idQ,
+        axios.get('http://localhost:3001/streams').then(response =>{
+        console.log('Streaaaaams',response)    
+        this.setState({
+                idQ:response.data[0].idQ,
                 countDown:this.state.countDown -1
             })
         })
