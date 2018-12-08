@@ -34,11 +34,12 @@ export default class QuestionsPannel extends React.Component{
         let elem = e.currentTarget;
         let idQuestion = Number(elem.dataset.id)
 
+        console.log('questiooon',idQuestion);
         LaunchQuestions.delete('streams/1',{
             headers: {
               'Content-Type': 'application/json'
             }});
-        LaunchQuestions.post('/streams',{idQ:idQuestion});
+        LaunchQuestions.post('/streams',{idQ:idQuestion-1});
     }
 
     render(){

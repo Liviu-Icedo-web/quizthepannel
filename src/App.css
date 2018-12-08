@@ -19,7 +19,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #2a6107;
 }
 
 @keyframes App-logo-spin {
@@ -36,13 +36,13 @@ body {
 font-family: Open Sans;
   margin-top: 25px;
   margin-bottom: 50px;
-  background-image: url('/img/thePannel_bg.jpg');
+ background-image: url('/img/thePannel_bg.jpg');
   
 }
 
 #question {
-  background-color: #0094da;
-  color: white;
+   background-color: #2a6107;    /*background-color: #0094da;*/
+     color: white;
   padding: 10px;
   text-align: center;
   margin: 5px 5px;
@@ -76,7 +76,7 @@ font-family: Open Sans;
 
 #answers li {
   background-color: #fff;
-  border: 2px solid #0094da;
+  border: 2px solid #2a6107;
   min-height: 70px;
   width: 48%;
   display: flex;
@@ -86,7 +86,7 @@ font-family: Open Sans;
 }
 
 #answers li span {
-  background-color: #0084da;
+  background-color: #2a6107;
   color: #fff;
   font-size: 30px;
   flex: 75px;
@@ -114,16 +114,16 @@ font-family: Open Sans;
 }
 
 #answers li.right {
-  border-color: #1ea55b;
-  color: #1ea55b;
+  border-color: #46e48d;
+  color: #34cf7a;
 }
 
 #answers li.right span {
-  background-color: #1ea55b;
+  background-color: #34cf7a;
 }
 
 #answers li.right p {
-  color: #1ea55b;
+  color: #34cf7a;
 }
 
 #answers li.wrong {
@@ -184,7 +184,7 @@ font-family: Open Sans;
 }
 
 .popup h1 {
-  background-color: #0094da;
+   background-color: #2a6107;   /*background-color: #0094da;*/
   color: white;
   border-bottom: 1px solid #ccc;
   padding: 20px;
@@ -308,7 +308,8 @@ footer span {
   font-size: 18px;
   margin: 5px;
   height: 44px;
-  background-color: #0094da;
+  background-color: #2a6107;
+    /*background-color: #0094da;*/
   color: white;
   border:1px solid #e0e0e0;
 }
@@ -323,7 +324,7 @@ footer span {
   font-size: 18px;
   margin: 5px;
   height: 44px;
-  background-color: #0094da;
+   background-color: #2a6107;   /*background-color: #0094da;*/
   color: white;
   border:1px solid #e0e0e0;
 }
@@ -336,7 +337,7 @@ footer span {
 .singOut-btn {
   border: 2px solid #0094da;
   border-radius: 0;
-  background-color: #0094da;
+   background-color: #2a6107;     /*background-color: #0094da;*/
   color: #fff;
   display: inline-block;
   font-size: 18px;
@@ -348,8 +349,8 @@ footer span {
 }
 
 .singOut-btn:hover {
-  border: 2px solid #085477;
-  background-color: #085477;
+  border: 2px solid #42811a;
+  background-color: #40920d;
   color: rgb(165, 164, 164);
 }
 
@@ -362,7 +363,7 @@ footer span {
 }
 
 .userName{
-  color:#0094da;
+  color: #2a6107;
   font-weight: bold;
 }
 
@@ -371,14 +372,14 @@ footer span {
 }
 
 .capture-btn-pn {
-  border: 2px solid #0094da;
-  background-color: #0094da;
+  border: 2px solid #122b03;
+   background-color: #2a6107;   /*background-color: #0094da;*/
   color: #fff;
 }
 
 .capture-btn-pn:hover {
-  border: 2px solid #085477;
-  background-color: #085477;
+  border: 2px solid #1b350c;
+  background-color: #1f3a0f;
   color: rgb(165, 164, 164);
 }
 

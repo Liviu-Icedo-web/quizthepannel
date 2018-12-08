@@ -78,7 +78,7 @@ class Main extends React.Component {
                     answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
                     correct: data[newState.idQ].correct,
                     questionAnswered:false,
-                    countDown:10
+                    countDown:5
                   })
             }
             
@@ -99,12 +99,20 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
-        axios.get('http://localhost:3001/streams').then(response =>{
-        console.log('Streaaaaams',response)    
-        this.setState({
-                idQ:response.data[0].idQ,
-                countDown:this.state.countDown -1
-            })
+        axios.get('http://localhost:3001/streams').then(response =>{   
+        
+            if(response.data[0]==null){
+
+            }else{
+                this.setState({
+                    
+                        idQ:response.data[0].idQ,
+                        countDown:this.state.countDown -1
+                    })
+                  
+            }
+        
+        
         })
     }
 
