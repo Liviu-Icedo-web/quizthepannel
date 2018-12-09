@@ -4,6 +4,11 @@ export default [
         answers: ['Menos de 90', '180', '360'],
         correct: 1
     },
+    {
+        question: 'En que año se fundo el equipo de fútbol Real Madrid?',
+        answers: ['1902', '1922', '1913'],
+        correct: 1
+    },
 
     {
         question: 'Calatayud pertenece a la provincia de?',
@@ -36,11 +41,7 @@ export default [
         answers: ['Alicante', 'Orense', 'Sevilla'],
         correct: 2
     },
-    {
-        question: 'En que año se fundo el equipo de fútbol Real Madrid?',
-        answers: ['1902', '1922', '1913'],
-        correct: 2
-    },
+    
     {
         question: '¿Cómo se le llama a un grupo de lobos?',
         answers: ['Rebaño', 'Camada', 'Manada'],

@@ -27,6 +27,7 @@ export default class QuestionsPannel extends React.Component{
                     })
             })
             .catch(error => {
+                console.log('Questions-getQuestions',error.message)
             })
     }
 
@@ -38,8 +39,12 @@ export default class QuestionsPannel extends React.Component{
         LaunchQuestions.delete('streams/1',{
             headers: {
               'Content-Type': 'application/json'
-            }});
-        LaunchQuestions.post('/streams',{idQ:idQuestion-1});
+            }}).catch(error => {
+                console.log('LaunchQuestions-Delete',error.message)
+            });
+        LaunchQuestions.post('/streams',{idQ:idQuestion-1}).catch(error => {
+            console.log('LaunchQuestions-POST',error.message)
+        });
     }
 
     render(){

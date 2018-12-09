@@ -12,6 +12,7 @@ import QuestionsPannel from './Questions';
 
 
 
+
 class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -95,6 +96,7 @@ class Main extends React.Component {
             })
         })
         .catch(error => {
+            console.log('getQuestions',error.message)
         })
     }
     
@@ -113,6 +115,9 @@ class Main extends React.Component {
             }
         
         
+        })
+        .catch(error => {
+            console.log('getQuestions',error.message)
         })
     }
 
