@@ -86,7 +86,7 @@
     },
     {
         "question": "¿Cuántos días tiene un año bisiesto?",
-        "answers": ["365 díass", "366 días", "370 días"],
+        "answers": ["365 días", "366 días", "370 días"],
         "correct": 2
     }
 ]

@@ -8,7 +8,7 @@ import LoginForm from './LoginForm';
 import Welcome from './Welcome';
 import SingOut from './SingOut';
 import UserCam from './WebCam';
-import apiThePannel from '../api/apiThePannel';
+import QuestionsPannel from './Questions';
 
 
 
@@ -18,9 +18,11 @@ class Main extends React.Component {
         super(props);
         this.state = {
             nr: 0,
-            questions:[],
+            total: data.length,
+            showButton: false,
             questionAnswered: false,
             score: 0,
+            displayPopup: 'flex',
             user:null,
             wrongAnswer: false,
             userThePannel: false,
@@ -28,6 +30,8 @@ class Main extends React.Component {
             idQ:10,
 
         }
+        this.nextQuestion = this.nextQuestion.bind(this);
+        this.handleShowButton = this.handleShowButton.bind(this);
         this.handleStartQuiz = this.handleStartQuiz.bind(this);
         this.handleIncreaseScore = this.handleIncreaseScore.bind(this);
         this.signIn= this.signIn.bind(this);
@@ -42,19 +46,17 @@ class Main extends React.Component {
     }
 
     pushData(nr) {
-        let {questions} = this.state;
         this.setState({
-            question: questions[nr].question,
-            answers: [questions[nr].answers[0], questions[nr].answers[1], questions[nr].answers[2], questions[nr].answers[3] ],
-            correct: questions[nr].correct,
+            question: data[nr].question,
+            answers: [data[nr].answers[0], data[nr].answers[1], data[nr].answers[2], data[nr].answers[3] ],
+            correct: data[nr].correct,
             nr: this.state.nr + 1
         });
     }
 
     componentWillMount() {
         let { nr } = this.state;
-        this.getQuestions();
-        //this.pushData(nr);
+        this.pushData(nr);
         setInterval(()=>{this.getLaunchIdQ()},1000)
         
     }
@@ -87,10 +89,7 @@ class Main extends React.Component {
     }
 
     getQuestions(){
-        apiThePannel.get('preguntas.json',  {headers:{
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
-          }})
+        axios.get('/Questions.json')
             .then(response => {
                 this.setState({
                     questions:response.data
@@ -102,10 +101,7 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
-        apiThePannel.get('concurso.json',{headers:{
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
-          }}).then(response =>{   
+        axios.get('http://localhost:3001/streams').then(response =>{   
         
             if(response.data[0]==null){
 
@@ -125,6 +121,29 @@ class Main extends React.Component {
         })
     }
 
+    nextQuestion() {
+        let { nr, total, score } = this.state;
+        console.log('next Question',nr);
+
+        if(nr === total){
+            this.setState({
+                displayPopup: 'flex'
+            });
+        } else {
+            this.pushData(nr);
+            this.setState({
+                showButton: false,
+                questionAnswered: false
+            });
+        }
+    }
+
+    handleShowButton() {
+        this.setState({
+            showButton: true,
+            questionAnswered: true
+        })
+    }
 
     handleStartQuiz() {
         this.setState({
@@ -180,7 +199,7 @@ class Main extends React.Component {
     }
 
     showQuestion(){
-        let { nr, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
+        let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
        return(
         <Answers answers={answers} question={question} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer}/>
        ) ;
@@ -212,6 +231,8 @@ class Main extends React.Component {
                 {(this.state.user) ? 
                                     <React.Fragment>
                                         <Welcome user={this.state.user} score={score} onSignOut={this.signOut.bind(this)}/>
+                                        {userThePannel  ?   <QuestionsPannel />
+                                                        :
                                                             <div className="row">
                                                                 <UserCam/>
                                                                 <div className="col-lg-10 col-lg-offset-1">
@@ -224,6 +245,7 @@ class Main extends React.Component {
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                        }                
                                     </React.Fragment>
                     :<LoginForm onSignIn={this.signIn.bind(this)}/>}     
                 <Footer />

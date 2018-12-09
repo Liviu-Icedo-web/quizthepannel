@@ -19,7 +19,7 @@
 }
 
 .App-link {
-  color: #2a6107;
+  color: #1157d1;
 }
 
 @keyframes App-logo-spin {
@@ -41,7 +41,7 @@ font-family: Open Sans;
 }
 
 #question {
-   background-color: #2a6107;    /*background-color: #0094da;*/
+   background-color: #1157d1;    /*background-color: #0094da;*/
      color: white;
   padding: 10px;
   text-align: center;
@@ -76,7 +76,7 @@ font-family: Open Sans;
 
 #answers li {
   background-color: #fff;
-  border: 2px solid #2a6107;
+  border: 2px solid #1157d1;
   min-height: 70px;
   width: 48%;
   display: flex;
@@ -86,7 +86,7 @@ font-family: Open Sans;
 }
 
 #answers li span {
-  background-color: #2a6107;
+  background-color: #1157d1;
   color: #fff;
   font-size: 30px;
   flex: 75px;
@@ -184,7 +184,7 @@ font-family: Open Sans;
 }
 
 .popup h1 {
-   background-color: #2a6107;   /*background-color: #0094da;*/
+   background-color: #1157d1;   /*background-color: #0094da;*/
   color: white;
   border-bottom: 1px solid #ccc;
   padding: 20px;
@@ -281,6 +281,7 @@ footer span {
   border-bottom: 1px solid #ccc;
   padding: 20px;
   margin-top: 0;
+  text-shadow: 2px 2px 4px #000000;
 }
 
 .form-container p {
@@ -308,15 +309,18 @@ footer span {
   font-size: 18px;
   margin: 5px;
   height: 44px;
-  background-color: #2a6107;
+  background-color: #1157d1;
     /*background-color: #0094da;*/
   color: white;
   border:1px solid #e0e0e0;
 }
 
 .thePannel{
-  font-size: 18px;
-  color:#fff;
+  margin-top: 10px;
+  background-color: #1157d1;
+  font-size: 42px;
+  color: #fff;
+  text-shadow: 2px 2px 4px #000000;
 }
 
 
@@ -324,7 +328,7 @@ footer span {
   font-size: 18px;
   margin: 5px;
   height: 44px;
-   background-color: #2a6107;   /*background-color: #0094da;*/
+   background-color: #1157d1;   /*background-color: #0094da;*/
   color: white;
   border:1px solid #e0e0e0;
 }
@@ -337,7 +341,7 @@ footer span {
 .singOut-btn {
   border: 2px solid #0094da;
   border-radius: 0;
-   background-color: #2a6107;     /*background-color: #0094da;*/
+   background-color: #1157d1;     /*background-color: #0094da;*/
   color: #fff;
   display: inline-block;
   font-size: 18px;
@@ -363,7 +367,7 @@ footer span {
 }
 
 .userName{
-  color: #2a6107;
+  color: #1157d1;
   font-weight: bold;
 }
 
@@ -372,25 +376,39 @@ footer span {
 }
 
 .capture-btn-pn {
-  border: 2px solid #122b03;
-   background-color: #2a6107;   /*background-color: #0094da;*/
+  border: 2px solid #276ce4;
+   background-color: #1157d1;   /*background-color: #0094da;*/
   color: #fff;
 }
 
 .capture-btn-pn:hover {
-  border: 2px solid #1b350c;
-  background-color: #1f3a0f;
-  color: rgb(165, 164, 164);
+  border: 2px solid #276ce4;
+  background-color: #276ce4;
+  color: #fff;
 }
 
 .capture-pn img{
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  border: 3px solid #e0e0e0;
+  border: 3px solid #276ce4;
 }
 
 .video-pn video{
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  border: 3px solid #e0e0e0;
+  border: 3px solid #276ce4;
 }
+
+.questions{
+  background-color: #1157d1;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  margin: 5px 5px;
+  box-shadow: 0px 2px 2px #143b63
+}
+
+.questions p{
+ font-size:15px;
+}
+
 /* Liviu--> */
 /*Fin Icedo Web CSS-->*/

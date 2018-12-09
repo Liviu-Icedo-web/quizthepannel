@@ -52,10 +52,8 @@ export default class QuestionsPannel extends React.Component{
         return(
             <div>
                     {questions.map((q,i)=>
-                        <div id="answers" key={'answes-'+i}>
-                            <div id="question" key={'questions-'+i}>
+                        <div className="questions" key={'questions-'+i}>
                                 <p key={i} onClick={this.launchQuestion} data-id={i+1}>{i+1}. {q.question}</p>
-                            </div>
                         </div>
                     )} 
             </div>  
