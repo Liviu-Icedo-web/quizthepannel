@@ -47,7 +47,7 @@ class Main extends React.Component {
             question: questions[nr].question,
             answers: [questions[nr].answers[0], questions[nr].answers[1], questions[nr].answers[2], questions[nr].answers[3] ],
             correct: questions[nr].correct,
-            nr: this.state.nr + 1
+            nr: this.state.nr
         });
     }
 
@@ -60,6 +60,7 @@ class Main extends React.Component {
     }
 
     componentDidUpdate(oldProps,oldState){
+        let {questions} = this.state;
         const newState = this.state  
         if(oldState.user !== newState.user) {
             this.checkAdmin();
@@ -68,14 +69,16 @@ class Main extends React.Component {
             })
         }
         if(oldState.idQ !== newState.idQ) {
+            console.log('Siuuuuuuu');
             if(newState.idQ==null){
 
             }else{
+                console.log('Questions',questions.preguntas)
                 this.setState({
                     idQ:newState.idQ,
-                    question: data[newState.idQ].question,
-                    answers: [data[newState.idQ].answers[0], data[newState.idQ].answers[1], data[newState.idQ].answers[2] ],
-                    correct: data[newState.idQ].correct,
+                    question: questions.preguntas[newState.idQ-1].question,
+                    answers: [questions.preguntas[newState.idQ-1].answers[0], questions.preguntas[newState.idQ-1].answers[1], questions.preguntas[newState.idQ-1].answers[2] ],
+                    correct: questions.preguntas[newState.idQ-1].correct,
                     questionAnswered:false,
                     countDown:5
                   })
@@ -87,10 +90,7 @@ class Main extends React.Component {
     }
 
     getQuestions(){
-        apiThePannel.get('preguntas.json',  {headers:{
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
-          }})
+        apiThePannel.get('preguntas.json')
             .then(response => {
                 this.setState({
                     questions:response.data
@@ -102,10 +102,8 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
-        apiThePannel.get('concurso.json',{headers:{
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
-          }}).then(response =>{   
+        apiThePannel.get('concurso.json').then(response =>{   
+           
         
             if(response.data[0]==null){
 
@@ -117,7 +115,7 @@ class Main extends React.Component {
                     })
                   
             }
-        
+            console.log('Responseeeee',this.state.idQ)
         
         })
         .catch(error => {
@@ -206,7 +204,7 @@ class Main extends React.Component {
     render() {
         let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
         console.log('Main',this.state)
-        console.log('MainProps',this.props)
+        
         return (
             <div className="container">
                 {(this.state.user) ? 

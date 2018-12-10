@@ -19,10 +19,7 @@ class Welcome extends React.Component {
           return (<p>Respuestas Correctas: {this.props.score}</p>);
        }
    }
-    render() {
-        console.log('welcome State',this.state)
-        console.log('welcome Props',this.props);
-        
+    render() { 
         return (     
                                 <div className='row welcome-block'>
                                     <div className='col-xs-10 col-md-9 welcome'>Bienvenido <span className='userName'>{this.props.user.username}</span> ! {this.nrScore()}</div>

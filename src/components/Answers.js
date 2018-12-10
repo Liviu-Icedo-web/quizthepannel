@@ -25,7 +25,7 @@ class Answers extends React.Component {
             let { correct, increaseScore } = this.props;
             let answer = Number(elem.dataset.id);
             let updatedClassNames = this.state.classNames;
-
+            correct =parseInt(correct)
             if(answer === correct){
                 updatedClassNames[answer-1] = 'right';
                 increaseScore();
@@ -45,8 +45,6 @@ class Answers extends React.Component {
             this.setState({
                 classNames: updatedClassNames
             })
-
-            this.props.showButton();
         }
     }
     
@@ -63,7 +61,9 @@ class Answers extends React.Component {
         let { answers,question,score } = this.props;
         let { win,classNames } = this.state;
         
-        
+        console.log('showQuestion State --->', this.state);
+        console.log('showQuestionops Props---->',this.props)
+
         if(!win){
             return(
                 <div id="answers">
@@ -101,15 +101,15 @@ class Answers extends React.Component {
     }
     
     render() {
-       
+        console.log('Answer State --->', this.state);
+        console.log('Answer Props---->',this.props)
         
         let transition = {
             transitionName: "example",
             transitionEnterTimeout: 500,
             transitionLeaveTimeout: 300
         }
-        console.log('Answers-State',this.state)
-        console.log('Answers-Props',this.props)
+
         
         return (
 
