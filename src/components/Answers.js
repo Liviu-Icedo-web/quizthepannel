@@ -35,7 +35,8 @@ class Answers extends React.Component {
                 updatedClassNames[answer-1] = 'right';
                 increaseScore();
                 this.setState({
-                    win:true
+                    win:true,
+                    answerCount: -10000 // bug with answer count
                 })
             }
             else {
