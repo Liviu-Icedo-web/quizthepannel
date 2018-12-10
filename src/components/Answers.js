@@ -1,4 +1,5 @@
 import React from 'react';
+import SingOut from './SingOut';
 
 
 class Answers extends React.Component {
@@ -8,12 +9,16 @@ class Answers extends React.Component {
             isAnswered: false,
             classNames: ['', '', ''],
             correctAnswer: true,
+            secToAnswer: 5,
+            answerCount:-1000, // lo mas grande mejor
             win:false
         }
         
         this.checkAnswer = this.checkAnswer.bind(this);
         this.showQuestion = this.showQuestion.bind(this);
         this.showError = this.showError.bind(this);
+        this.answerCountDown = this.answerCountDown.bind(this);
+        this.singOut= this.signOut.bind(this);
     }
     
     checkAnswer(e) {
@@ -47,9 +52,16 @@ class Answers extends React.Component {
             })
         }
     }
-    
+    componentWillMount(){
+        this.setState({
+            answerCount: this.props.countDown -5,
+            
+        })
+    }
     componentDidUpdate(oldProps,oldState) {
         const newProps = this.props
+       this.answerCountDown()
+       
         if(oldProps.answers !== newProps.answers) {
           this.setState({
             classNames:['','','']
@@ -58,8 +70,8 @@ class Answers extends React.Component {
       }
 
     showQuestion(){
-        let { answers,question,score } = this.props;
-        let { win,classNames } = this.state;
+        let { answers,question,score,countDown} = this.props;
+        let { win,classNames,answerCount } = this.state;
         
         console.log('showQuestion State --->', this.state);
         console.log('showQuestionops Props---->',this.props)
@@ -70,11 +82,13 @@ class Answers extends React.Component {
             <div id="question">
                 
                 <p>{question}</p>
+                
             </div>
+            <div className='segToAnswer'><p>Segundos para responder:{-(answerCount-countDown)}</p></div>
                 <ul>
-                    <li onClick={this.checkAnswer} className={classNames[0]} data-id="1"><span>A</span> <p>{answers[0]}</p></li>
-                    <li onClick={this.checkAnswer} className={classNames[1]} data-id="2"><span>B</span> <p>{answers[1]}</p></li>
-                    <li onClick={this.checkAnswer} className={classNames[2]} data-id="3"><span>C</span> <p>{answers[2]}</p></li>
+                    <li onClick={this.checkAnswer} className='red' data-id="1"><span>A</span> <p>{answers[0]}</p></li>
+                    <li onClick={this.checkAnswer} className='green' data-id="2"><span>B</span> <p>{answers[1]}</p></li>
+                    <li onClick={this.checkAnswer} className='yellow' data-id="3"><span>C</span> <p>{answers[2]}</p></li>
                 </ul>
             </div>
             );
@@ -92,12 +106,31 @@ class Answers extends React.Component {
         
     }
 
+    answerCountDown(){
+        let {answerCount} = this.state;
+
+        if( answerCount > this.props.countDown ){
+            return false;
+            
+        }else{
+            return true;
+        }
+    
+    }
     showError(){
         return(
-            <div className="alert alert-danger" role="alert">
-            Has fallado. La respuesta correcta, era <strong>{this.props.answers[this.props.correct-1]}</strong>
-      </div>
+            <React.Fragment>
+                <div className="alert alert-danger" role="alert">
+                 Has fallado. La respuesta correcta, era <strong>{this.props.answers[this.props.correct-1]}</strong>
+             </div>
+             <SingOut onSignOut={this.signOut.bind(this)}/>
+             </React.Fragment>
         );
+    }
+    signOut() {
+        // clear out user from state
+        this.setState({user: null})
+        window.location.reload();
     }
     
     render() {
@@ -113,7 +146,7 @@ class Answers extends React.Component {
         
         return (
 
-            (this.state.correctAnswer)?
+            (this.state.correctAnswer && this.answerCountDown()) ?
             this.showQuestion()
             :
             this.showError()

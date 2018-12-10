@@ -180,7 +180,7 @@ class Main extends React.Component {
     showQuestion(){
         let { nr, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
        return(
-        <Answers answers={answers} question={question} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer}/>
+        <Answers answers={answers} question={question} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer} countDown={countDown}/>
        ) ;
     }
     countBlock(){
@@ -216,10 +216,6 @@ class Main extends React.Component {
                                                                     
                                                                     {countDown>10 ? this.welcomeThePannel()
                                                                                 : countDown <0 ? this.showQuestion():this.countBlock()}
-                                                            
-                                                                    <div id="submit">
-                                                                        {wrongAnswer    ?   <SingOut onSignOut={this.signOut.bind(this)}/>: null}
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                     </React.Fragment>
