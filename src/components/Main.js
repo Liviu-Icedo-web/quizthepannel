@@ -53,6 +53,7 @@ class Main extends React.Component {
 
     componentWillMount() {
         let { nr } = this.state;
+        this.userId();
         this.getQuestions();
         //this.pushData(nr);
         setInterval(()=>{this.getLaunchIdQ()},1000)
@@ -77,7 +78,7 @@ class Main extends React.Component {
                 this.setState({
                     idQ:newState.idQ,
                     question: questions.preguntas[newState.idQ-1].question,
-                    answers: [questions.preguntas[newState.idQ-1].answers[0], questions.preguntas[newState.idQ-1].answers[1], questions.preguntas[newState.idQ-1].answers[2] ],
+                    answers: [questions.preguntas[newState.idQ-1].answers[0], questions.preguntas[newState.idQ-1].answers[1], questions.preguntas[newState.idQ-1].answers[2],questions.preguntas[newState.idQ-1].answers[3]],
                     correct: questions.preguntas[newState.idQ-1].correct,
                     questionAnswered:false,
                     countDown:5
@@ -90,7 +91,7 @@ class Main extends React.Component {
     }
 
     getQuestions(){
-        apiThePannel.get('preguntas.json')
+        apiThePannel.get('json/preguntas.json')
             .then(response => {
                 this.setState({
                     questions:response.data
@@ -102,7 +103,7 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
-        apiThePannel.get('concurso.json').then(response =>{   
+        apiThePannel.get('json/concurso.json').then(response =>{   
            
         
             if(response.data[0]==null){
@@ -160,6 +161,19 @@ class Main extends React.Component {
         })        
     }
 
+    userId(){
+        var first = Math.floor(Math.random() * 1000);
+        var second = Math.floor(Math.random() * 10);
+        var third = Math.floor(Math.random() * 10000);
+
+        return(
+            this.setState({
+                userIdPn: first+second+third
+            })
+        )
+
+    }
+
     checkWrongAnswer(){
         this.setState({
             wrongAnswer:true
@@ -178,9 +192,9 @@ class Main extends React.Component {
     }
 
     showQuestion(){
-        let { nr, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
+        let { nr, idQ, question, questions, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown,user,userIdPn} = this.state;
        return(
-        <Answers answers={answers} question={question} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer} countDown={countDown}/>
+        <Answers answers={answers} idQ={idQ} question={question} questions={questions} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer} countDown={countDown} user={user} userIdPn={userIdPn}/>
        ) ;
     }
     countBlock(){

@@ -22,8 +22,8 @@ class Welcome extends React.Component {
     render() { 
         return (     
                                 <div className='row welcome-block'>
-                                    <div className='col-xs-10 col-md-9 welcome'>Bienvenido <span className='userName'>{this.props.user.username}</span> ! {this.nrScore()}</div>
-                                        <div className='col-md-2 out'><a href="javascript:;" onClick={this.props.onSignOut}>Salir</a></div>
+                                    <div className='col-xs-7 col-md-8 welcome'>Bienvenido <span className='userName'>{this.props.user.username}</span> ! {this.nrScore()}</div>
+                                        <div className='col-md-2 out'><a href='https://www.thepannel.tv/live/'> Concursantes | </a><a href="javascript:;" onClick={this.props.onSignOut}>Salir</a></div>
                                 </div>
                        
         );

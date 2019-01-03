@@ -1,5 +1,6 @@
 import React from 'react';
 import SingOut from './SingOut';
+import apiThePannel from '../api/apiThePannel';
 
 
 class Answers extends React.Component {
@@ -19,6 +20,7 @@ class Answers extends React.Component {
         this.showError = this.showError.bind(this);
         this.answerCountDown = this.answerCountDown.bind(this);
         this.singOut= this.signOut.bind(this);
+        //this.winner = this.winner.bind(this);
     }
     
     checkAnswer(e) {
@@ -38,6 +40,7 @@ class Answers extends React.Component {
                     win:true,
                     answerCount: -10000 // bug with answer count
                 })
+                this.sendDataPN(true);
             }
             else {
                 updatedClassNames[answer-1] = 'wrong';
@@ -45,6 +48,7 @@ class Answers extends React.Component {
                     correctAnswer:false
                 })
                 this.props.checkWrongAnswer({wrongAnswer:true})
+                this.sendDataPN(false);
                 //this.props.quitUser({user: null})   Aqui la logica de elimnar el USER cuando falla
             }
             
@@ -54,6 +58,7 @@ class Answers extends React.Component {
         }
     }
     componentWillMount(){
+       // this.winner()
         this.setState({
             answerCount: this.props.countDown -5,
             
@@ -88,8 +93,9 @@ class Answers extends React.Component {
             <div className='segToAnswer'><p>Segundos para responder:{-(answerCount-countDown)}</p></div>
                 <ul>
                     <li onClick={this.checkAnswer} className='red' data-id="1"><span>A</span> <p>{answers[0]}</p></li>
-                    <li onClick={this.checkAnswer} className='green' data-id="2"><span>B</span> <p>{answers[1]}</p></li>
-                    <li onClick={this.checkAnswer} className='yellow' data-id="3"><span>C</span> <p>{answers[2]}</p></li>
+                    <li onClick={this.checkAnswer} className='yellow' data-id="2"><span>B</span> <p>{answers[1]}</p></li>
+                    <li onClick={this.checkAnswer} className='green' data-id="3"><span>C</span> <p>{answers[2]}</p></li>
+                    <li onClick={this.checkAnswer} className='orange' data-id="4"><span>D</span> <p>{answers[3]}</p></li>
                 </ul>
             </div>
             );
@@ -134,6 +140,46 @@ class Answers extends React.Component {
         window.location.reload();
     }
     
+    sendDataPN(answer){
+        var postData = {
+            idQ: this.props.idQ,
+            userId: this.props.userIdPn,
+            userName:this.props.user.username,
+            answer:answer
+          };
+        
+          let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+            }
+          };
+        
+         
+          apiThePannel.post('estadisticas/resultados',postData)
+          .then((res) => {
+            console.log("RESPONSE RECEIVED: ", res);
+          })
+          .catch((err) => {
+            console.log(postData);
+            console.log("AXIOS ERROR: ", err);
+          })
+    }
+
+   /*winner(){
+        let {score, questions} = this.props;
+
+        console.log('Preguntas',questions.lenght)
+
+        if(score === questions.lenght){
+            <div className="alert alert-success" role="alert">
+            Enhorabuna <strong>has ganado</strong> !!!! 
+            </div>
+        }
+
+        
+
+    }*/
     render() {
         console.log('Answer State --->', this.state);
         console.log('Answer Props---->',this.props)

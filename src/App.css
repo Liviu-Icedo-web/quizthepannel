@@ -151,6 +151,30 @@ font-family: Open Sans;
 }
 
 
+.orange {
+  background-color: #fff;
+  border: 2px solid #ffa500;
+  min-height: 50px;
+  width: 48%;
+  display: flex;
+  margin-bottom: 25px;
+  transition: color .3s ease, border-color .3s ease, transform .3s ease;
+  cursor: pointer;
+  border-radius:15px;
+}
+
+.orange span {
+  border-radius:12px 0px 0px 12px;
+  background-color: #ffa500;
+  color: #fff;
+  font-size: 25px;
+  flex: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color .3s ease;
+}
+
 
 #answers li p {
   color: #0b0e21;
@@ -453,6 +477,7 @@ footer span {
 }
 
 .video-pn video{
+  display: block;
   border-radius: 15px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   border: 3px solid #276ce4;
@@ -481,6 +506,9 @@ footer span {
 
 .alert{
   margin-top:20px;
+}
+video {
+  display:none;
 }
 
 /* Liviu--> */

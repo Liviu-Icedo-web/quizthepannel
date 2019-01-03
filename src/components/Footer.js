@@ -4,7 +4,7 @@ class Footer extends React.Component{
     render() {
         return (
             <footer>
-                <p>The Pannel 2018 / PICH&KO </p>
+                <p>The Pannel 2019 </p>
             </footer>
         )
     }
