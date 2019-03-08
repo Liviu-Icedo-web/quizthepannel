@@ -38,7 +38,7 @@ class Answers extends React.Component {
                 increaseScore();
                 this.setState({
                     win:true,
-                    answerCount: -10000 // bug with answer count
+                    answerCount: this.props.countDown -5 // bug with answer count
                 })
                 this.sendDataPN(true);
             }
@@ -66,12 +66,18 @@ class Answers extends React.Component {
     }
     componentDidUpdate(oldProps,oldState) {
         const newProps = this.props
-       this.answerCountDown()
+       this.answerCountDown();
        
         if(oldProps.answers !== newProps.answers) {
+            
           this.setState({
             classNames:['','','']
           })
+        
+          if(oldProps.question !== newProps.question){
+            this.showQuestion();
+          }
+
         }
       }
 
@@ -79,10 +85,10 @@ class Answers extends React.Component {
         let { answers,question,score,countDown} = this.props;
         let { win,classNames,answerCount } = this.state;
         
-        console.log('showQuestion State --->', this.state);
-        console.log('showQuestionops Props---->',this.props)
-
-        if(!win){
+        //console.log('showQuestion State --->', this.state);
+        //console.log('showQuestionops Props---->',this.props)
+        console.log('Nueva Pregunta', question);
+       // if(!win){
             return(
                 <div id="answers">
             <div id="question">
@@ -100,14 +106,14 @@ class Answers extends React.Component {
             </div>
             );
         
-        }else{
+       /* }else{
             
             return(
             <div className="alert alert-success" role="alert">
             Bien, tienes <strong>{this.props.score}</strong> respuesta correcta 
             </div>
             )
-        }
+        }*/
             
         
         
@@ -116,7 +122,10 @@ class Answers extends React.Component {
     answerCountDown(){
         let {answerCount} = this.state;
 
+        console.log('AnwserCount',answerCount);
+        console.log('PropsCount',this.props.countDown);
         if( answerCount > this.props.countDown ){
+            console.log('Anser False -----');
             return false;
             
         }else{
@@ -181,8 +190,8 @@ class Answers extends React.Component {
 
     }*/
     render() {
-        console.log('Answer State --->', this.state);
-        console.log('Answer Props---->',this.props)
+       // console.log('Answer State --->', this.state);
+       //console.log('Answer Props---->',this.props)
         
         let transition = {
             transitionName: "example",
@@ -193,7 +202,8 @@ class Answers extends React.Component {
         
         return (
 
-            (this.state.correctAnswer && this.answerCountDown()) ?
+            //(this.state.correctAnswer && this.answerCountDown()) ?
+           this.answerCountDown() ?
             this.showQuestion()
             :
             this.showError()

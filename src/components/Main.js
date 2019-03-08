@@ -25,7 +25,7 @@ class Main extends React.Component {
             wrongAnswer: false,
             userThePannel: false,
             countDown:10000,
-            idQ:10,
+            idQ:0,
 
         }
         this.handleStartQuiz = this.handleStartQuiz.bind(this);
@@ -65,9 +65,9 @@ class Main extends React.Component {
         const newState = this.state  
         if(oldState.user !== newState.user) {
             this.checkAdmin();
-            this.setState({
+           /* this.setState({
                 countDown:10000 //Tengo un bug con el Mount por esto lo rescribo aqui
-            })
+            })*/
         }
         if(oldState.idQ !== newState.idQ) {
             console.log('Siuuuuuuu');
@@ -75,14 +75,19 @@ class Main extends React.Component {
 
             }else{
                 console.log('Questions',questions.preguntas)
+                console.log('Question Lenght',questions.preguntas.length)
+                let {idQ} = this.state;
+               if(idQ <= questions.preguntas.length-1){
+                   console.log('Entraaaaaaa')
                 this.setState({
-                    idQ:newState.idQ,
-                    question: questions.preguntas[newState.idQ-1].question,
-                    answers: [questions.preguntas[newState.idQ-1].answers[0], questions.preguntas[newState.idQ-1].answers[1], questions.preguntas[newState.idQ-1].answers[2],questions.preguntas[newState.idQ-1].answers[3]],
-                    correct: questions.preguntas[newState.idQ-1].correct,
-                    questionAnswered:false,
-                    countDown:5
+                    question: questions.preguntas[idQ].question,
+                        answers: [questions.preguntas[idQ].answers[0], questions.preguntas[idQ].answers[1], questions.preguntas[idQ].answers[2],questions.preguntas[idQ].answers[3]],
+                        correct: questions.preguntas[idQ].correct,
+                        questionAnswered:false,
+                    
                   })
+               }
+               
             }
             
             
@@ -103,15 +108,27 @@ class Main extends React.Component {
     }
     
     getLaunchIdQ(){
+
+        let {countDown, questions,idQ} = this.state;
         apiThePannel.get('json/concurso.json').then(response =>{   
            
         
             if(response.data[0]==null){
 
             }else{
+                if(countDown % 5 === 0 ){
+                    console.log('idQ ----->',idQ);
+                    this.setState({
+                        idQ:idQ+1,
+                        question: questions.preguntas[idQ].question,
+                        answers: [questions.preguntas[idQ].answers[0], questions.preguntas[idQ].answers[1], questions.preguntas[idQ].answers[2],questions.preguntas[idQ].answers[3]],
+                        correct: questions.preguntas[idQ].correct,
+                        questionAnswered:false,
+                      })
+                }
                 this.setState({
                     
-                        idQ:response.data[0].idQ,
+                        //idQ:response.data[0].idQ,
                         countDown:this.state.countDown -1
                     })
                   
@@ -143,6 +160,7 @@ class Main extends React.Component {
     // This is where you would call Firebase, an API etc...
     // calling setState will re-render the entire app (efficiently!)
     this.setState({
+        countDown:6,
         user: {
             username
             }
