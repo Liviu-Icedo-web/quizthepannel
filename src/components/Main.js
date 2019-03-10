@@ -27,6 +27,7 @@ class Main extends React.Component {
             countDown:10000,
             idQ:0,
 
+
         }
         this.handleStartQuiz = this.handleStartQuiz.bind(this);
         this.handleIncreaseScore = this.handleIncreaseScore.bind(this);
@@ -41,44 +42,32 @@ class Main extends React.Component {
        
     }
 
-    pushData(nr) {
-        let {questions} = this.state;
-        this.setState({
-            question: questions[nr].question,
-            answers: [questions[nr].answers[0], questions[nr].answers[1], questions[nr].answers[2], questions[nr].answers[3] ],
-            correct: questions[nr].correct,
-            nr: this.state.nr
-        });
-    }
-
     componentWillMount() {
-        let { nr } = this.state;
         this.userId();
         this.getQuestions();
-        //this.pushData(nr);
         setInterval(()=>{this.getLaunchIdQ()},1000)
         
     }
 
     componentDidUpdate(oldProps,oldState){
-        let {questions} = this.state;
+        let {questions,idQ,countDown} = this.state;
         const newState = this.state  
         if(oldState.user !== newState.user) {
             this.checkAdmin();
-           /* this.setState({
-                countDown:10000 //Tengo un bug con el Mount por esto lo rescribo aqui
-            })*/
+ 
         }
+        if(oldState.launchTime !== newState.launchTime){
+            this.setState({
+                idQ:0,//Para que muestre la primera pregunta
+                countDown: 10
+            })
+        }//Launch the Contest
         if(oldState.idQ !== newState.idQ) {
-            console.log('Siuuuuuuu');
             if(newState.idQ==null){
 
             }else{
-                console.log('Questions',questions.preguntas)
-                console.log('Question Lenght',questions.preguntas.length)
                 let {idQ} = this.state;
                if(idQ <= questions.preguntas.length-1){
-                   console.log('Entraaaaaaa')
                 this.setState({
                     question: questions.preguntas[idQ].question,
                         answers: [questions.preguntas[idQ].answers[0], questions.preguntas[idQ].answers[1], questions.preguntas[idQ].answers[2],questions.preguntas[idQ].answers[3]],
@@ -89,8 +78,6 @@ class Main extends React.Component {
                }
                
             }
-            
-            
               
             }
     }
@@ -110,31 +97,32 @@ class Main extends React.Component {
     getLaunchIdQ(){
 
         let {countDown, questions,idQ} = this.state;
-        apiThePannel.get('json/concurso.json').then(response =>{   
-           
+        apiThePannel.get('json/timestamp.json').then(response =>{   
         
             if(response.data[0]==null){
 
             }else{
-                if(countDown % 5 === 0 ){
-                    console.log('idQ ----->',idQ);
-                    this.setState({
-                        idQ:idQ+1,
-                        question: questions.preguntas[idQ].question,
-                        answers: [questions.preguntas[idQ].answers[0], questions.preguntas[idQ].answers[1], questions.preguntas[idQ].answers[2],questions.preguntas[idQ].answers[3]],
-                        correct: questions.preguntas[idQ].correct,
-                        questionAnswered:false,
-                      })
-                }
-                this.setState({
+                if(countDown % 10 === 0 ){
+                    console.log('idQ ----->',idQ+' Count ' +countDown);
+                    if(countDown == 0){
+                        this.setState({
+                            idQ:0,
+                        })    
+                    }else{
+                        this.setState({
+                            idQ:idQ+1,
+                        })
+                    }
+
                     
-                        //idQ:response.data[0].idQ,
-                        countDown:this.state.countDown -1
-                    })
-                  
+                    
             }
-            console.log('Responseeeee',this.state.idQ)
-        
+                this.setState({
+                        launchTime:response.data[0].dateTime,
+                        countDown:this.state.countDown -1
+                    })       
+            }
+           
         })
         .catch(error => {
             console.log('getQuestions',error.message)
@@ -160,7 +148,8 @@ class Main extends React.Component {
     // This is where you would call Firebase, an API etc...
     // calling setState will re-render the entire app (efficiently!)
     this.setState({
-        countDown:6,
+        idQ:1000,//Subimos el ID de Qa para que no empienze 
+        countDown:10000,//Lanzamos concurso
         user: {
             username
             }
@@ -200,7 +189,6 @@ class Main extends React.Component {
 
     checkAdmin(){
         const userThePannel = this.state.user ? this.state.user.username: null
-        console.log(userThePannel)
         if(userThePannel === 'userThePannel'){
            this.setState({
                 userThePannel:true
@@ -211,14 +199,17 @@ class Main extends React.Component {
 
     showQuestion(){
         let { nr, idQ, question, questions, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown,user,userIdPn} = this.state;
-       return(
+       console.log('Show Question IdQ --->',idQ)
+      
+       
+        return(
         <Answers answers={answers} idQ={idQ} question={question} questions={questions} score={score} correct={correct} showButton={this.handleShowButton} isAnswered={questionAnswered} increaseScore={this.handleIncreaseScore}  quitUser={this.quitUser} checkWrongAnswer ={this.checkWrongAnswer} countDown={countDown} user={user} userIdPn={userIdPn}/>
        ) ;
     }
     countBlock(){
         return(
             <div id="question">
-                <h4>Preparate, la pregunta se lanzara en:</h4>
+                <h4>Preparate, el concurso se lanzara en:</h4>
                 <p>{this.state.countDown}</p>
             </div>
         );
@@ -235,7 +226,7 @@ class Main extends React.Component {
     }
     render() {
         let { nr, total, question, answers, correct, showButton, questionAnswered, displayPopup, score,wrongAnswer,userThePannel,countDown} = this.state;
-        console.log('Main',this.state)
+        console.log('Main Count Down',countDown)
         
         return (
             <div className="container">
@@ -246,8 +237,8 @@ class Main extends React.Component {
                                                                 <UserCam/>
                                                                 <div className="col-lg-10 col-lg-offset-1">
                                                                     
-                                                                    {countDown>10 ? this.welcomeThePannel()
-                                                                                : countDown <0 ? this.showQuestion():this.countBlock()}
+                                                                    {countDown > 10 ? this.welcomeThePannel()
+                                                                                : countDown < 0 ? this.showQuestion():this.countBlock()}
                                                                 </div>
                                                             </div>
                                     </React.Fragment>

@@ -12,7 +12,9 @@ class Answers extends React.Component {
             correctAnswer: true,
             secToAnswer: 5,
             answerCount:-1000, // lo mas grande mejor
-            win:false
+            win:true,
+            winner:false,
+            showCorrectAnswer:false
         }
         
         this.checkAnswer = this.checkAnswer.bind(this);
@@ -20,12 +22,16 @@ class Answers extends React.Component {
         this.showError = this.showError.bind(this);
         this.answerCountDown = this.answerCountDown.bind(this);
         this.singOut= this.signOut.bind(this);
-        //this.winner = this.winner.bind(this);
+        this.showCorrectAnswer = this.showCorrectAnswer.bind(this);
+        this.showWinner = this.showWinner.bind(this);
+        this.setWinner = this.setWinner.bind(this);
     }
     
     checkAnswer(e) {
         let { isAnswered } = this.props;
-        
+        this.setState({
+            clickedQuestion:true
+        })
         if(!isAnswered) {
             
             let elem = e.currentTarget;
@@ -37,15 +43,15 @@ class Answers extends React.Component {
                 updatedClassNames[answer-1] = 'right';
                 increaseScore();
                 this.setState({
-                    win:true,
-                    answerCount: this.props.countDown -5 // bug with answer count
+                    showCorrectAnswer:true
                 })
                 this.sendDataPN(true);
             }
             else {
                 updatedClassNames[answer-1] = 'wrong';
                 this.setState({
-                    correctAnswer:false
+                    correctAnswer:false,
+                    win:false
                 })
                 this.props.checkWrongAnswer({wrongAnswer:true})
                 this.sendDataPN(false);
@@ -58,9 +64,9 @@ class Answers extends React.Component {
         }
     }
     componentWillMount(){
-       // this.winner()
+       // 
         this.setState({
-            answerCount: this.props.countDown -5,
+            answerCount: this.props.countDown -9,
             
         })
     }
@@ -68,42 +74,66 @@ class Answers extends React.Component {
         const newProps = this.props
        this.answerCountDown();
        
+       
         if(oldProps.answers !== newProps.answers) {
             
           this.setState({
-            classNames:['','','']
+            classNames:['','',''],
+            answerCount:-10
+
           })
         
           if(oldProps.question !== newProps.question){
+            this.setState({
+                answerCount:this.props.countDown -10,
+                showCorrectAnswer:false,
+                clickedQuestion:false
+              })
+            
             this.showQuestion();
           }
 
         }
       }
 
+    showCorrectAnswer(){
+        let {showCorrectAnswer} = this.state;
+        if(showCorrectAnswer){
+        return(
+                <div className="alert alert-success" role="alert">
+                        Bien, tienes <strong>{this.props.score}</strong> respuesta correcta
+                </div>
+            )
+        }
+        
+        
+    }  
+
     showQuestion(){
         let { answers,question,score,countDown} = this.props;
-        let { win,classNames,answerCount } = this.state;
+        let { answerCount,winner } = this.state;
         
         //console.log('showQuestion State --->', this.state);
         //console.log('showQuestionops Props---->',this.props)
         console.log('Nueva Pregunta', question);
-       // if(!win){
+       //if(!win){
             return(
                 <div id="answers">
-            <div id="question">
-                
-                <p>{question}</p>
-                
-            </div>
-            <div className='segToAnswer'><p>Segundos para responder:{-(answerCount-countDown)}</p></div>
-                <ul>
-                    <li onClick={this.checkAnswer} className='red' data-id="1"><span>A</span> <p>{answers[0]}</p></li>
-                    <li onClick={this.checkAnswer} className='yellow' data-id="2"><span>B</span> <p>{answers[1]}</p></li>
-                    <li onClick={this.checkAnswer} className='green' data-id="3"><span>C</span> <p>{answers[2]}</p></li>
-                    <li onClick={this.checkAnswer} className='orange' data-id="4"><span>D</span> <p>{answers[3]}</p></li>
-                </ul>
-            </div>
+                {this.setWinner()}
+                    {winner ? this.showWinner() : this.showCorrectAnswer()}
+                    <div id="question">
+
+                        <p>{question}</p>
+
+                    </div>
+                    <div className='segToAnswer'><p>Segundos para responder:{-(answerCount - countDown)}</p></div>
+                    <ul>
+                        <li onClick={this.checkAnswer} className='red' data-id="1"><span>A</span> <p>{answers[0]}</p></li>
+                        <li onClick={this.checkAnswer} className='yellow' data-id="2"><span>B</span> <p>{answers[1]}</p></li>
+                        <li onClick={this.checkAnswer} className='green' data-id="3"><span>C</span> <p>{answers[2]}</p></li>
+                        <li onClick={this.checkAnswer} className='orange' data-id="4"><span>D</span> <p>{answers[3]}</p></li>
+                    </ul>
+                </div>
             );
         
        /* }else{
@@ -120,16 +150,25 @@ class Answers extends React.Component {
     }
 
     answerCountDown(){
-        let {answerCount} = this.state;
-
-        console.log('AnwserCount',answerCount);
-        console.log('PropsCount',this.props.countDown);
-        if( answerCount > this.props.countDown ){
-            console.log('Anser False -----');
-            return false;
-            
-        }else{
+        let {answerCount,win,clickedQuestion,winner} = this.state;
+        let timeTo5 =answerCount-this.props.countDown;
+        
+        if(this.props.idQ === 0){
             return true;
+        }else if(winner){
+            return true;
+        }   
+        
+        else if(timeTo5 %15 === 0 && !clickedQuestion){
+            //return false;
+            window.location.replace('https://www.thepannel.tv/failed.php?user='+this.props.user.username+'&corectAnswers='+this.props.score+'&goodAnswer='+this.props.answers[this.props.correct-1]);
+        }else{    
+            if( (answerCount > this.props.countDown) || (win !== true)){
+                window.location.replace('https://www.thepannel.tv/failed.php?user='+this.props.user.username+'&corectAnswers='+this.props.score+'&goodAnswer='+this.props.answers[this.props.correct-1]);
+                
+            }else{
+                return true;
+            }
         }
     
     }
@@ -147,6 +186,7 @@ class Answers extends React.Component {
         // clear out user from state
         this.setState({user: null})
         window.location.reload();
+    //window.location.replace('https://www.thepannel.tv/failed.php?user='+this.props.user.username+'&corectAnswers='+this.props.score+'&goodAnswer='+this.props.answers[this.props.correct-1]);
     }
     
     sendDataPN(answer){
@@ -175,30 +215,25 @@ class Answers extends React.Component {
           })
     }
 
-   /*winner(){
+   setWinner(){
         let {score, questions} = this.props;
-
-        console.log('Preguntas',questions.lenght)
-
-        if(score === questions.lenght){
-            <div className="alert alert-success" role="alert">
+        console.log('Entra Winner');
+        
+       if(score === this.props.questions.preguntas.length){
+            window.location.replace('https://www.thepannel.tv/winner.php?user='+this.props.user.username)
+        }    
+    }  
+    showWinner (){
+        return (
+           
+                <div className="alert alert-success" role="alert">
             Enhorabuna <strong>has ganado</strong> !!!! 
             </div>
-        }
-
-        
-
-    }*/
+           )
+    }
     render() {
-       // console.log('Answer State --->', this.state);
-       //console.log('Answer Props---->',this.props)
-        
-        let transition = {
-            transitionName: "example",
-            transitionEnterTimeout: 500,
-            transitionLeaveTimeout: 300
-        }
-
+        console.log('Answer State --->', this.state);
+        console.log('Answer Props---->',this.props)
         
         return (
 
